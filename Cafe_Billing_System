@@ -42,31 +42,55 @@ void Order(int choice) {
 }
 void printBill() {
     printf("\n::Your Bill::\n");
-    printf("Grand Total: %d/-\n", totalBill);
+    printf("Sr.No.  | Item          | Qty | Rate    | Sub Total\n");
+    printf("----------------------------------------------------\n");
+    if (samosaQty > 0)
+        printf("  1      | Samosa       |  %d  |  20     | %d/-\n", samosaQty, samosaQty * 20);
+    if (dosaQty > 0)
+        printf("  2      | Dosa         |  %d  |  30     | %d/-\n", dosaQty, dosaQty * 30);
+    if (teaQty > 0)
+        printf("  3      | Tea          |  %d  |  10     | %d/-\n", teaQty, teaQty * 10);
+    printf("----------------------------------------------------\n");
+    printf("                        Grand Total: %d/-\n", totalBill);
 }
-
+void printChange(int change) {
+    int notes[] = {200, 100, 50, 20, 10};
+    int noteCount[5] = {0};
+    printf("\nReturn %d\n\n", change);
+    for (int i = 0; i < 5; i++) {
+        if (change >= notes[i]) {
+            noteCount[i] = change / notes[i];
+            change %= notes[i];
+        }
+    }
+    for (int i = 0; i < 5; i++) {
+        if (noteCount[i] > 0) {
+            printf("%d Notes X %d = %d\n", notes[i], noteCount[i], notes[i] * noteCount[i]);
+        }
+    }
+}
 void Payment() {
     int cash;
     int change;
     printf("Enter Your Cash: ");
     scanf("%d", &cash);
-    if (cash >= totalBill) {
+    if (cash > totalBill) {
         change = cash - totalBill;
-        printf("\nReturn %d\n\n", change);
-    }
-    else {
-            printf("\nCase 3: When user gives money same as needed\n");
-            printf("Enter Your Cash: ");
-            scanf("%d", &cash);
-            if (cash == totalBill) {
-                printf("Thank You!\n");
-            } else {
-                printf("Please pay the exact amount.\n");
-            }
+        printChange(change);
+    } else if (cash < totalBill) {
+        printf("Please pay %d Rs. more\n", totalBill - cash);
+        printf("Enter Your Cash: ");
+        int additionalCash;
+        scanf("%d", &additionalCash);
+        cash += additionalCash;
+        change = cash - totalBill;
+        if (change > 0) {
+            printChange(change);
         }
-    
+    } else {
+        printf("\nT H A N K  Y O U!\n");
+    }
 }
-
 int main() {
     int choice;
     while (b) {
